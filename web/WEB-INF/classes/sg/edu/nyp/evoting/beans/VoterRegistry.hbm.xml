@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 7, 2015 7:06:49 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="sg.edu.nyp.evoting.beans.VoterRegistry" table="voter_registry" catalog="">
+        <id name="voterId" type="string">
+            <column name="VOTER_ID" length="30" />
+            <generator class="assigned" />
+        </id>
+        <property name="zipcode" type="java.lang.Integer">
+            <column name="ZIPCODE" />
+        </property>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="50" />
+        </property>
+        <property name="nric" type="string">
+            <column name="NRIC" length="9" unique="true" />
+        </property>
+        <property name="dateOfBirth" type="date">
+            <column name="DATE_OF_BIRTH" length="10" />
+        </property>
+        <property name="gender" type="java.lang.Character">
+            <column name="GENDER" length="1" />
+        </property>
+        <property name="addressLine1" type="string">
+            <column name="ADDRESS_LINE1" length="150" />
+        </property>
+        <property name="addressLine2" type="string">
+            <column name="ADDRESS_LINE2" length="150" />
+        </property>
+        <property name="email" type="string">
+            <column name="EMAIL" length="50" />
+        </property>
+        <property name="mobilePhone" type="java.lang.Integer">
+            <column name="MOBILE_PHONE" />
+        </property>
+        <property name="modifiedDate" type="timestamp">
+            <column name="MODIFIED_DATE" length="19" />
+        </property>
+        <set name="pollingLogs" table="polling_log" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="VOTER_ID" length="30" />
+            </key>
+            <one-to-many class="sg.edu.nyp.evoting.beans.PollingLog" />
+        </set>
+    </class>
+</hibernate-mapping>

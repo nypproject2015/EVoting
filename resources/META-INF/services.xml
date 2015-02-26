@@ -1,0 +1,13 @@
+<service name="EVotingService" scope="application" targetNamespace="http://evoting.nyp.edu.sg/">
+    <description>
+        EVoting Service
+    </description>
+    <messageReceivers>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-only"
+                         class="org.apache.axis2.rpc.receivers.RPCInOnlyMessageReceiver"/>
+        <messageReceiver mep="http://www.w3.org/2004/08/wsdl/in-out"
+                         class="org.apache.axis2.rpc.receivers.RPCMessageReceiver"/>
+    </messageReceivers>
+    <schema schemaNamespace="http://evoting.nyp.edu.sg/xsd"/>
+    <parameter name="ServiceClass">sg.edu.nyp.evoting.service.EVotingService</parameter>
+</service>

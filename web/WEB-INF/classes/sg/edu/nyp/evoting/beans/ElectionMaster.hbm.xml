@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 7, 2015 7:06:49 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="sg.edu.nyp.evoting.beans.ElectionMaster" table="election_master" catalog="">
+        <id name="electionId" type="int">
+            <column name="ELECTION_ID" />
+            <generator class="assigned" />
+        </id>
+        <property name="electionType" type="string">
+            <column name="ELECTION_TYPE" length="30" />
+        </property>
+        <property name="dateOfElection" type="date">
+            <column name="DATE_OF_ELECTION" length="10" />
+        </property>
+        <property name="electionStatus" type="string">
+            <column name="ELECTION_STATUS" length="8" />
+        </property>
+        <set name="candidateMasters" table="candidate_master" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="ELECTION_ID" />
+            </key>
+            <one-to-many class="sg.edu.nyp.evoting.beans.CandidateMaster" />
+        </set>
+        <set name="constituencyMasters" table="constituency_master" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="ELECTION_ID" />
+            </key>
+            <one-to-many class="sg.edu.nyp.evoting.beans.ConstituencyMaster" />
+        </set>
+    </class>
+</hibernate-mapping>

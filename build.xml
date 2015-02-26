@@ -1,0 +1,125 @@
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements. See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership. The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License. You may obtain a copy of the License at
+  ~
+  ~ http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied. See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<project name="EVotingService" basedir="." default="war">
+
+    <property environment="env"/>
+    <property name="AXIS2_HOME" value="../axis2-1.6.2"/>
+	<property name="war-file-name" value="EVoting.war" />
+	<property name="web-xml-file" value="web/WEB-INF/web.xml" />
+	<property name="web-inf-folder" value="web/WEB-INF" />
+	<property name="web-directory" value="web" />
+	<tstamp prefix="build-info">
+		<format property="current-date" pattern="d-MMMM-yyyy" locale="en" />
+		<format property="current-time" pattern="hh:mm:ss a z" locale="en" />
+	</tstamp>
+	
+    <property name="build.dir" value="build"/>
+
+    <path id="service.classpath">
+        <fileset dir="${web-inf-folder}/lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile.service">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/classes"/>
+
+        <!--First let's compile the classes-->
+        <javac debug="on" 
+               fork="true"
+               destdir="${build.dir}/classes" 
+               srcdir="${basedir}/src/main/java"
+               classpathref="service.classpath">
+        </javac>
+		<copy toDir="${basedir}/web/WEB-INF/classes" failonerror="true" overwrite="yes">
+            <fileset dir="${build.dir}/classes">
+                <include name="**/*.class"/>
+            </fileset>
+			<fileset dir="${basedir}/src/main/resources">
+				<include name="**/*.xml" />	
+			</fileset>
+        </copy>
+    </target>
+
+    <target name="generate.wsdl" depends="compile.service">
+        <taskdef name="java2wsdl"
+                 classname="org.apache.ws.java2wsdl.Java2WSDLTask"
+                 classpathref="service.classpath"/>
+        <java2wsdl className="sg.edu.nyp.evoting.service.EVotingService"
+                   outputLocation="${build.dir}"
+                   targetNamespace="http://evoting.nyp.edu.sg/"
+                   schemaTargetNamespace="http://evoting.nyp.edu.sg/xsd">
+            <classpath>
+                <pathelement path="${service.classpath}"/>
+                <pathelement location="${build.dir}/classes"/>
+            </classpath>
+        </java2wsdl>
+    </target>
+
+    <target name="generate.service" depends="compile.service">
+        <!--aar them up -->
+        <copy toDir="${build.dir}/classes" failonerror="false">
+            <fileset dir="${basedir}/resources">
+                <include name="**/*.xml"/>
+            </fileset>
+			<fileset dir="${basedir}/src/main/resources">
+				<include name="**/*.xml" />	
+			</fileset>
+        </copy>
+        <jar destfile="${build.dir}/EVotingService.aar">
+            <fileset excludes="**/Test.class" dir="${build.dir}/classes"/>
+        </jar>
+        <!--copy file="${build.dir}/EVotingService.aar"
+              toDir="${basedir}/../../repository/services"
+              overwrite="yes">  
+        </copy--> 
+		<copy file="${build.dir}/EVotingService.aar"
+              toDir="${basedir}/web/WEB-INF/services"
+              overwrite="yes">  
+        </copy> 
+    </target>
+	
+	<target name="war" depends="generate.wsdl, generate.service">
+		<mkdir dir="${build.dir}" />
+		<delete file="${build.dir}/${war-file-name}" />
+		<war warfile="${build.dir}/${war-file-name}" webxml="${web-xml-file}">
+			<classes dir="${web-directory}/WEB-INF/classes" />
+			<fileset dir="${web-directory}">
+				<!-- Need to exclude it since webxml is an attribute of the war tag above -->								
+				<include name="WEB-INF/conf/**" />	
+				<include name="WEB-INF/lib/**" />								
+				<include name="WEB-INF/modules/*" />	
+				<include name="WEB-INF/services/*" />	
+				<include name="axis2-web/**" />				
+				<include name="org/**" />								
+				<exclude name="WEB-INF/web.xml" />
+			</fileset>
+			<manifest>				
+				<attribute name="Built-On" value="${build-info.current-date}" />
+				<attribute name="Built-At" value="${build-info.current-time}" />
+			</manifest>
+		</war>
+	</target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+</project>

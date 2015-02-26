@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 9, 2015 1:01:14 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="sg.edu.nyp.evoting.beans.VoterLogbook" table="voter_logbook" catalog="">
+        <composite-id name="id" class="sg.edu.nyp.evoting.beans.VoterLogbookId">
+            <key-property name="constituencyPartyMappingid" type="string">
+                <column name="CONSTITUENCY_PARTY_MAPPINGID" length="150" />
+            </key-property>
+            <key-property name="counter" type="string">
+                <column name="COUNTER" length="150" />
+            </key-property>
+            <key-property name="isvalid" type="string">
+                <column name="ISVALID" length="150" />
+            </key-property>
+            <key-property name="dateOfVoting" type="string">
+                <column name="DATE_OF_VOTING" length="150" />
+            </key-property>
+            <key-property name="checksum" type="string">
+                <column name="CHECKSUM" length="200" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 7, 2015 7:06:49 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="sg.edu.nyp.evoting.beans.CandidateConstituencyMapping" table="candidate_constituency_mapping" catalog="">
+        <id name="candidateConstituencyId" type="string">
+            <column name="CANDIDATE_CONSTITUENCY_ID" length="10" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="candidateMaster" class="sg.edu.nyp.evoting.beans.CandidateMaster" fetch="select">
+            <column name="CANDIDATE_ID" />
+        </many-to-one>
+        <many-to-one name="constituencyMaster" class="sg.edu.nyp.evoting.beans.ConstituencyMaster" fetch="select">
+            <column name="CONSTITUENCY_ID" length="10" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

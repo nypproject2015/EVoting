@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Feb 7, 2015 7:06:49 PM by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="sg.edu.nyp.evoting.beans.CandidateMaster" table="candidate_master" catalog="">
+        <id name="candidateId" type="int">
+            <column name="CANDIDATE_ID" />
+            <generator class="assigned" />
+        </id>
+        <many-to-one name="partyRegistry" class="sg.edu.nyp.evoting.beans.PartyRegistry" fetch="select">
+            <column name="PARTY_ID" length="5" />
+        </many-to-one>
+        <many-to-one name="electionMaster" class="sg.edu.nyp.evoting.beans.ElectionMaster" fetch="select">
+            <column name="ELECTION_ID" />
+        </many-to-one>
+        <property name="firstName" type="string">
+            <column name="FIRST_NAME" length="50" />
+        </property>
+        <property name="lastName" type="string">
+            <column name="LAST_NAME" length="50" />
+        </property>
+        <property name="dateOfBirth" type="date">
+            <column name="DATE_OF_BIRTH" length="10" />
+        </property>
+        <property name="nric" type="string">
+            <column name="NRIC" length="9" unique="true" />
+        </property>
+        <property name="gender" type="java.lang.Character">
+            <column name="GENDER" length="1" />
+        </property>
+        <set name="candidateConstituencyMappings" table="candidate_constituency_mapping" inverse="true" lazy="false" fetch="select">
+            <key>
+                <column name="CANDIDATE_ID" />
+            </key>
+            <one-to-many class="sg.edu.nyp.evoting.beans.CandidateConstituencyMapping" />
+        </set>
+    </class>
+</hibernate-mapping>
